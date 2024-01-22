@@ -1,0 +1,28 @@
+name: Upload test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Upload test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Prepare upload'
+        id: upload-prep
+        run: |
+          if test -d ././tests/results; then
+            echo dir=$(realpath ././tests/results) >> $GITHUB_OUTPUT
+          else
+            echo dir=nothingtoupload >> $GITHUB_OUTPUT 
+          fi
+
+      - name: 'Upload Artifacts'
+        uses: actions/upload-artifact@v3
+        with:
+          name: output
+          path: ${{ steps.upload-prep.outputs.dir }}
+          retention-days: 1
+          if-no-files-found: ignore
+
