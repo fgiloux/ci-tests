@@ -1,0 +1,35 @@
+name: Message test
+
+on:
+  workflow_dispatch:
+    inputs:
+      result:
+        description: "Failure or Success"
+        required: true
+        default: 'Failure'
+
+jobs:
+  test:
+    name: Message test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Exec'
+        id: exec
+        run: |
+          if [[ "${{ inputs.result }}" == "Success" ]]; then
+            echo "Success"
+            exit 0
+          else
+            echo "Failure"
+            exit 1
+          fi
+
+      - name: 'Message'
+        if: always()
+        id: message
+        env:
+          message: "*message* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ job.status == ‘Success’ && ‘workflow passed!> :tada::tada:tada:’ || ‘workflow failed!> :rotating_light::rotating_light::rotating_light: }}"
+        run: |
+          echo "${{ env.message }}"
+
