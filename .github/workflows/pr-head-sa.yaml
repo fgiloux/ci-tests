@@ -1,0 +1,12 @@
+name: PR
+on:
+  pull_request: {}
+
+jobs:
+  pr-sha:
+    runs-on: ubuntu-20.04
+    steps:
+      - id: showcommit
+        name: Show PR head sha 
+        run: |
+          echo ${{ github.event.pull_request.head.sha }}
