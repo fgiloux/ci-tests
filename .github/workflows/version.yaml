@@ -1,0 +1,14 @@
+name: PR
+on:
+  pull_request: {}
+
+jobs:
+  version:
+    runs-on: ubuntu-20.04
+    steps:
+      - id: version
+        name: Parsing version
+        run: |
+          RELEASE="v1.14.7"
+          echo ${RELEASE#v}
+
