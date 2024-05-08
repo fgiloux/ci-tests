@@ -1,0 +1,22 @@
+name: if test
+
+on:
+  workflow_dispatch:
+    inputs:
+      dorun:
+        description: "Whether to run the step"
+        required: true
+        default: 'false'
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Exec'
+        id: exec
+        if: ${{ inputs.dorun == 'true' }}
+        run: |
+          echo "Step has been run"
+
