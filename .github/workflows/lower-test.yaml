@@ -1,0 +1,23 @@
+name: Lowering case test
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Message to lower case"
+        required: true
+        default: 'Failure'
+
+jobs:
+  test:
+    name: Message test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Lower'
+        id: lower
+        run: |
+          msg="${{ inputs.message }}"
+          msg="${msg,,}"
+          echo $msg
+
