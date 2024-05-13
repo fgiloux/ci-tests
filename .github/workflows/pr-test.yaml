@@ -4,6 +4,10 @@ on:
     branches:
       - v*
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   pr:
     runs-on: ubuntu-20.04
@@ -19,6 +23,7 @@ jobs:
       - id: change
         name: Make and commit a change 
         run: |
+          git checkout -b pr/pr-wf/${GITHUB_REF##*/}
           echo $(date) > test.txt
           git add test.txt
           git config --global user.email "frederic.giloux@isovalent.com"
