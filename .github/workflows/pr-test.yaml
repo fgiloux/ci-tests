@@ -19,6 +19,7 @@ jobs:
       - id: change
         name: Make and commit a change 
         run: |
+          git checkout -b pr/pr-wf/${GITHUB_REF##*/}
           echo $(date) > test.txt
           git add test.txt
           git config --global user.email "frederic.giloux@isovalent.com"
