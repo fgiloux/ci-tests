@@ -1,0 +1,32 @@
+name: PR
+on:
+  push:
+    branches:
+      - v*
+
+jobs:
+  pr:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checking out the release branch
+      - name: Checkout Source Code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          submodules: false
+
+      - id: change
+        name: Make and commit a change 
+        run: |
+          echo $(date) > test.txt
+          git add test.txt
+          git config --global user.email "frederic.giloux@isovalent.com"
+          git config --global user.name "fgiloux"
+          git remote set-url origin https://fgiloux:${GITHUB_TOKEN}@github.com/fgiloux/ci-tests.git
+          git commit -m "chore: Keep up with the date"
+          git push --set-upstream origin pr/pr-wf/${GITHUB_REF##*/}
+          # Create a PR with the updated ClusterServiceVersion against the release branch
+          gh pr create -B main --title "chore: Keeping up with the date" --body 'Created by GitHub action: PR.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
