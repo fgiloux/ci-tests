@@ -1,0 +1,29 @@
+name: PR
+on:
+  push
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  olm:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checking out the branch
+      - name: Checkout Source Code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          submodules: false
+          ref: olm
+
+      - id: opm
+        name: Use opm container to manipulate a catalog
+        run: |
+          # works
+          docker run --rm -v "$(git rev-parse --show-toplevel)":/workdir --user "$(id -u):$(id -g)" mikefarah/yq:4.31.1 e -i '.name = "preview-2"' /workdir/cool-catalog/operator.yaml
+          # permissions denied
+          # docker run --rm -v "$(git rev-parse --show-toplevel)":/workdir mikefarah/yq:4.31.1 e -i '.name = "preview-2"' /workdir/cool-catalog/operator.yaml
+          cat cool-catalog/operator.yaml

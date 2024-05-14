@@ -1,0 +1,7 @@
+---
+schema: olm.channel
+package: example-operator
+name: preview
+entries:
+  - name: example-operator.v0.1.0
+
