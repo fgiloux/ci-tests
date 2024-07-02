@@ -1,0 +1,27 @@
+name: yq test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: yq
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Checkout Source Code'
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          submodules: false
+
+      - name: 'change field'
+        run: |
+          echo "with uid"
+          name=$(docker run -i --rm -v "${PWD}":/workdir -u "$(id -u)" mikefarah/yq:4.31.1 e -i ".others.field = \"with uid\"" /workdir/test.yaml)
+          cat test.yaml
+          echo "without uid"
+          name=$(docker run -i --rm -v "${PWD}":/workdir mikefarah/yq:4.31.1 e -i ".others.field = \"without uid\"" /workdir/test.yaml)
+          cat test.yaml 
+
