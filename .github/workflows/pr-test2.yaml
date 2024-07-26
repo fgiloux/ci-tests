@@ -1,0 +1,20 @@
+name: check when the wf is executed 
+
+on:
+  pull_request:
+    paths-ignore:
+      - "**.md"
+  push:
+    branches:
+      - master
+      - v*
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'echo'
+        run: |
+          echo "Workflow executed"
+
