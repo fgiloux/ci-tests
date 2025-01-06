@@ -3,8 +3,8 @@ on:
   # Allow to run manually
   workflow_dispatch: {}
   # Additionally run once a week at 3am on Monday
-  schedule:
-    - cron:  '0 3 * * MON'
+  # schedule:
+  #  - cron:  '0 3 * * MON'
 
 permissions:
   # To be able to access the repository with `actions/checkout` and to create a pull request
