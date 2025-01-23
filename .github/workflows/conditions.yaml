@@ -1,0 +1,21 @@
+name: test conditions
+
+on:
+  push:
+jobs:
+  my-little-job:
+    name: Test conditions
+    runs-on: ubuntu-24.04
+    steps:
+    - name: vars
+      id: vars
+      run: |
+        echo execute='true' >> $GITHUB_OUTPUT
+    - name: positive
+      if: ${{ steps.vars.outputs.execute == 'true' }}
+      run: |
+        echo "positive"
+    - name: negative
+      if: ${{ steps.vars.outputs.execute == 'false' }}
+      run: |
+        echo "negative"
