@@ -1,0 +1,23 @@
+name: test kubectl setup
+
+on:
+  push:
+jobs:
+  my-little-job:
+    name: Kubectl setup
+    runs-on: ubuntu-24.04
+    steps:
+    - name: install kubectl
+      run: |
+        curl -sLO "https://dl.k8s.io/release/v1.32.1/bin/linux/amd64/kubectl"
+        sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+        kubectl version --client
+    - name: validation
+      run: |
+        ls -la /home/runner
+        # ls -la /home/runner/.kube
+        # echo "test" > /home/runner/.kube/config
+        echo "test2" > test.txt
+        mkdir /home/runner/.kube
+        cp test.txt /home/runner/.kube/config
+        cat /home/runner/.kube/config
