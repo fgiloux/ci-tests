@@ -1,0 +1,22 @@
+name: fromjson
+
+on:
+  workflow_dispatch:
+    inputs:
+      myargs:
+        description: "Args"
+        required: false
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Exec'
+        id: exec
+        run: |
+          echo "help"
+          echo '${{ tojson(inputs) }}'
+          echo '${{ inputs.myargs }}'
+          echo '${{ fromJSON(inputs.myargs).kubevirt }}'
