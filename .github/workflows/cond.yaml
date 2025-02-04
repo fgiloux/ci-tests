@@ -1,0 +1,28 @@
+name: cond
+
+on:
+  push:
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Params'
+        id: params
+        run: |
+          echo "help"
+          extra_args="{\"kubevirt\":\"true\", \"ocp_version\":\"4.17.14\"}"
+          kubevirt="$(echo $extra_args | jq '.kubevirt')"
+          ocp_version="$(echo $extra_args | jq '.ocp_version')"
+          echo kubevirt=${kubevirt} >> $GITHUB_OUTPUT
+      - name: 'Show'
+        run: |
+          echo "${{ steps.params.outputs.kubevirt }}"
+      - name: 'Cond'
+        if: ${{ steps.vars.outputs.kubevirt }} == "true"
+        run: |
+          echo "conditional step run"
+
+

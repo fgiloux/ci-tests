@@ -20,3 +20,8 @@ jobs:
           echo '${{ tojson(inputs) }}'
           echo '${{ inputs.myargs }}'
           echo '${{ fromJSON(inputs.myargs).kubevirt }}'
+          a="{kubevirt:true, ocp_version:4.17.14}"
+          echo "$a" | jq '.kubevirt'
+          echo "$a" | jq '.ocp_version'
+
+
