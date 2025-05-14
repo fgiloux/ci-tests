@@ -3,8 +3,8 @@ name: event type test
 on:
   workflow_dispatch:
   pull_request:
-  schedule:
-    - cron:  "*/5 * * * *"
+  # schedule:
+  #  - cron:  "*/5 * * * *"
 jobs:
   test:
     name: test
@@ -18,7 +18,7 @@ jobs:
             sha="input"
           elif [ "${{ github.event_name }}" == 'schedule' ]; then
             echo "schedule"
-            sha="{{ ${{ github.sha }}"
+            sha="${{ github.sha }}"
           else
             echo "pull_request"
             sha="${{ github.event.pull_request.head.sha }}"
