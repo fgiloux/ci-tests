@@ -1,0 +1,27 @@
+name: event type test
+
+on:
+  workflow_dispatch:
+  pull_request:
+  schedule:
+    - cron:  '*/2 * * * *'
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 'Exec'
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "workflow_dispatch"
+            sha="input"
+          elif [ "${{ github.event_name }}" == 'schedule' ]; then
+            echo "schedule"
+            sha="{{ ${{ github.sha }}"
+          else
+            echo "pull_request"
+            sha="${{ github.event.pull_request.head.sha }}"
+          fi
+          echo "sha: ${sha}"
+
