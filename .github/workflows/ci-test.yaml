@@ -1,0 +1,16 @@
+name:  Test ext repo checkout
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout sail-operators repository
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      with:
+        repository: istio-ecosystem/sail-operator
+        path: sail-operator
+
+    - name: check
+      run: ls -l
