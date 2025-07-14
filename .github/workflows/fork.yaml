@@ -1,0 +1,60 @@
+name: Test GH API fork and PR
+
+on:
+  # TODO: For test only. To be removed before merge
+  push:
+    branches:
+      - pr/fgiloux/fork
+
+permissions:
+  # To be able to access the repository with actions/checkout.
+  contents: read
+  # To be able to request the JWT from GitHub's OIDC provider.
+  id-token: write
+
+jobs:
+  test-fork-and-pr:
+    name: Test fork and PR
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout CI repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          path: ci-repo
+
+      - name: Checkout certified-operators
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          repository: redhat-openshift-ecosystem/certified-operators
+          path: certified-operators
+
+      - name: Create and Sync the fork
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          script: |
+            const { data: fork } = await github.rest.repos.createFork({
+              owner: 'fgiloux',
+              repo: 'certified-operators',
+              default_branch_only: true,
+            });
+
+            await github.rest.repos.mergeUpstream({
+              owner: 'fgiloux',
+              repo: 'certified-operators',
+              branch: fork.default_branch,
+            });
+            core.exportVariable('DOWNSTREAM_URL', fork.clone_url);
+            console.log('Fork URL', fork.clone_url);
+            console.log('Fork default branch', fork.default_branch);
+
+      - name: Configure Fork
+        working-directory: ${{ github.workspace }}/certified-operators
+        run: |
+          pwd
+          git remote get-url upstream || \
+          git remote rename origin upstream && \
+          git remote add origin ${DOWNSTREAM_URL}
+          git remote -v
