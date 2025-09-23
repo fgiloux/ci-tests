@@ -1,3 +1,7 @@
-name: Great test
-others:
-  field: "useless"
+really: not_important
+what: just a bit of text
+
+  # Red Hat annotations
+  com.redhat.openshift.versions: "v4.14"
+
+  # Red Hat annotations\n  com.redhat.openshift.versions: "v4.14"
