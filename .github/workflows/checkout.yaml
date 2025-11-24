@@ -1,0 +1,22 @@
+name: Branch on worklfow dispactch
+
+on:
+  workflow_dispatch:
+
+permissions:
+  # To be able to access the repository with actions/checkout.
+  contents: read
+
+jobs:
+  checkout:
+    name: Checkout
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          persist-credentials: false
+
+      - name: Which branch?
+        run: |
+          git branch
