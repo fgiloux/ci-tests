@@ -1,0 +1,40 @@
+name:  Test artifacts
+on:
+  push:
+
+jobs:
+  upload:
+    strategy:
+      matrix:
+        runs-on: [ubuntu-latest,  ubuntu-22.04]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+    - name: Create a File
+      run: echo "hello from ${{ matrix.runs-on }}" > ubuntu.txt
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: my-artifact-${{ matrix.runs-on }}
+        path: ubuntu.txt
+  download:
+    needs: upload
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v8
+      with:
+        path: my-artifact
+        pattern: my-artifact-*
+        merge-multiple: true
+    - run: ls -R my-artifact && tail -v -n +1 my-artifact/*.txt
+
+  download-2:
+    needs: upload
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts again
+      uses: actions/download-artifact@v8
+      with:
+        path: my-artifact
+        pattern: my-artifact-*
+    - run: ls -R my-artifact && tail -v -n +1 my-artifact/**/*.txt
